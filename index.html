@@ -7,7 +7,9 @@
 <meta property="og:title" content="Eco-X: See Earth change">
 <meta property="og:description" content="NASA satellite science, made for everyone. Built in Uzbekistan.">
 <meta name="theme-color" content="#000000">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23000%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial,sans-serif%27 font-weight=%27800%27 font-size=%2734%27 fill=%27%234fd8d0%27 text-anchor=%27middle%27%3EX%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:image" content="https://eco-x.uz/assets/og.png">
 <title>Eco-X</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +61,7 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .nav .in { height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .logo { font-weight: 700; font-size: 1.15rem; letter-spacing: -0.03em; color: #f5f5f7; white-space: nowrap; }
 .logo:hover { text-decoration: none; }
-.logo b { color: var(--sea-d); }
+.logo img { height: 38px; width: auto; display: block; }
 .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; font-size: .82rem; overflow-x: auto; scrollbar-width: none; }
 .nav ul::-webkit-scrollbar { display: none; }
 .nav ul a { color: #d2d2d7; white-space: nowrap; }
@@ -69,6 +71,7 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 /* hero */
 .hero { background: #000; color: #f5f5f7; padding-top: clamp(60px, 9vw, 110px); text-align: center; --c-sea: var(--sea-d); --c-acc: var(--blue-d); --c-mute: var(--mute-d); }
 .hero h1 { font-size: clamp(4.6rem, 17vw, 13rem); letter-spacing: -0.065em; line-height: .9; font-weight: 800; }
+.hero-logo { width: min(440px, 72vw); height: auto; display: block; margin: 0 auto; }
 .hero h1 span { background: linear-gradient(180deg, #fff 30%, #6e6e73 120%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .tag { font-size: clamp(1.6rem, 4vw, 3rem); font-weight: 600; letter-spacing: -0.035em; margin-top: 14px; }
 .hero .sub { font-size: clamp(1.05rem, 1.8vw, 1.3rem); color: var(--mute-d); margin-top: 14px; }
@@ -306,13 +309,13 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 <body>
 
 <nav class="nav" aria-label="Main"><div class="in">
-  <a class="logo" href="#top">Eco<b>-X</b></a>
+  <a class="logo" href="#top" aria-label="Eco-X home"><img src="assets/logo-light.png" alt="EcoX" width="52" height="38"></a>
   <ul><li><a href="#pulse">Planet Pulse</a></li><li><a href="#georisk">GeoRisk</a></li><li><a href="#detective">Detective</a></li><li><a href="#tracker">Tracker</a></li><li><a href="#missions">Missions</a></li><li><a href="#points">Eco-Points</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
   <a class="btn" href="#missions">Start</a>
 </div></nav>
 
 <header class="hero" id="top"><div class="in">
-  <h1><span>Eco-X</span></h1>
+  <h1><img class="hero-logo" src="assets/logo-light.png" alt="EcoX" width="415" height="304"></h1>
   <p class="tag">See Earth change.</p>
   <p class="sub">NASA satellite science, made for everyone. Built in Uzbekistan.</p>
   <div class="cta"><a class="btn" href="#pulse">Explore the map</a><a class="btn ghost" href="#story">Watch the sea</a></div>

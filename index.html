@@ -70,22 +70,15 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 
 /* hero */
 .hero { position: relative; min-height: calc(100svh - 48px); background: #000; color: #f5f5f7; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; --c-sea: var(--sea-d); --c-acc: var(--blue-d); --c-mute: var(--mute-d); }
-.hbg { position: absolute; inset: 0; }
-.hbg img { position: absolute; inset: -4%; width: 108%; height: 108%; object-fit: cover; object-position: 40% 55%; will-change: transform, opacity; }
-.hbg .h0 { animation: kb 18s ease-in-out infinite alternate; }
-.hbg .h1 { opacity: 0; animation: kb 18s ease-in-out infinite alternate, xf 12s ease-in-out infinite; }
-@keyframes kb { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.18) translate(-3%, 2%); } }
-@keyframes xf { 0%, 30% { opacity: 0; } 45%, 80% { opacity: 1; } 95%, 100% { opacity: 0; } }
-.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.72) 38%, rgba(0,0,0,.25) 70%, rgba(0,0,0,.35) 100%), linear-gradient(180deg, rgba(0,0,0,.35) 0%, transparent 25%, transparent 60%, #000 100%); }
-.hscan { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, transparent 0%, rgba(79,216,208,.0) 45%, rgba(79,216,208,.18) 50%, rgba(79,216,208,0) 55%, transparent 100%); background-size: 100% 300%; animation: scan 7s linear infinite; mix-blend-mode: screen; opacity: .7; }
-@keyframes scan { from { background-position: 0 100%; } to { background-position: 0 -100%; } }
+.earth { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.35) 35%, transparent 60%), linear-gradient(180deg, transparent 70%, #000 100%); }
 .hin { position: relative; z-index: 2; width: 100%; padding-top: clamp(40px, 8vh, 90px); }
 .hkick { display: inline-flex; align-items: center; gap: 10px; font-size: .9rem; font-weight: 500; color: #d2d2d7; padding: 7px 14px 7px 12px; border-radius: 99px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .live { width: 8px; height: 8px; border-radius: 50%; background: #30d158; box-shadow: 0 0 0 0 rgba(48,209,88,.7); animation: pulse 1.8s infinite; flex: none; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(48,209,88,0); } 100% { box-shadow: 0 0 0 0 rgba(48,209,88,0); } }
 .htitle { font-size: clamp(3.4rem, 10vw, 8.6rem); font-weight: 800; letter-spacing: -0.06em; line-height: .92; margin-top: 22px; }
 .hgrad { background: linear-gradient(95deg, #4fd8d0 0%, #2997ff 55%, #bf5af2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero .sub { font-size: clamp(1.1rem, 1.9vw, 1.4rem); color: #d2d2d7; margin-top: 22px; max-width: 30em; }
+.hero .sub { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #d2d2d7; margin-top: 22px; max-width: 25em; }
 .hero .cta { display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
 .hstats { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; margin-top: clamp(40px, 7vh, 80px); padding-bottom: 70px; }
 .hstats div { padding: 16px 18px; border-radius: 18px; background: rgba(20,20,22,.55); border: 1px solid rgba(255,255,255,.1); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); min-width: 0; }
@@ -103,11 +96,11 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .hstats { animation: hup .9s .5s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes hup { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
 @media (max-width: 900px) {
-  .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: min(92vw, 420px); }
   .hlogo { display: none; }
-  .hero::before { background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.75) 45%, rgba(0,0,0,.85) 75%, #000 100%); }
+  .hero::before { background: linear-gradient(180deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.15) 45%, transparent 70%, #000 100%); }
 }
-@media (prefers-reduced-motion: reduce) { .hbg img, .hscan, .live, .hcue i, .hin > *, .hstats { animation: none !important; } .hbg .h1 { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .live, .hcue i, .hin > *, .hstats { animation: none !important; } }
 
 /* sticky satellite story */
 .story { position: relative; height: 360vh; background: #000; }
@@ -457,25 +450,20 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 </div>
 
 <header class="hero" id="top">
-  <div class="hbg" aria-hidden="true">
-    <img class="h0" src="assets/aral-2000.jpg" alt="">
-    <img class="h1" src="assets/aral-2018.jpg" alt="">
-  </div>
-  <div class="hscan" aria-hidden="true"></div>
+  <canvas id="earth" class="earth" aria-label="A slowly turning 3D Earth seen from space, with a glowing marker on the Aral Sea in Uzbekistan" role="img"></canvas>
   <div class="hin in">
-    <p class="hkick"><span class="live"></span>Real NASA satellite images · Aral Sea</p>
-    <h1 class="htitle">Watch a sea<br><span class="hgrad">disappear.</span></h1>
-    <p class="sub">Eco-X turns NASA Earth data into answers anyone can explore. Built in Uzbekistan.</p>
+    <p class="hkick"><span class="live"></span>NASA Earth data · Built in Uzbekistan</p>
+    <h1 class="htitle">See Earth<br><span class="hgrad">change.</span></h1>
+    <p class="sub">Eco-X turns satellite data into answers anyone can explore, starting with the Aral Sea, one of the fastest-changing places on Earth.</p>
     <div class="cta"><a class="btn" href="#pulse">Explore the map</a><a class="btn ghost" href="#story">Watch the story ↓</a></div>
   </div>
   <div class="hstats in" aria-label="Aral Sea in numbers">
-    <div><span class="hy" id="hYear">2000</span><span class="hl">satellite year</span></div>
+    <div><span class="hy">Aral Sea</span><span class="hl">45°N 60°E · Uzbekistan</span></div>
     <div><b class="cnt" data-to="68000" data-suf=" km²">0</b><span class="hl">water in 1960</span></div>
     <div><b class="cnt" data-to="8321" data-suf=" km²">0</b><span class="hl">left in 2018</span></div>
     <div><b class="cnt neg" data-to="88" data-pre="−" data-suf="%">0</b><span class="hl">of the sea, gone</span></div>
   </div>
   <a class="hcue" href="#story" aria-label="Scroll down"><i></i></a>
-  <img class="hlogo" src="assets/logo-light.png" alt="" aria-hidden="true">
 </header>
 
 <section class="story" id="story" aria-label="The Aral Sea from space, 1960 to 2018">
@@ -1000,10 +988,93 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     Array.prototype.forEach.call(cs, function (c) { c.textContent = (c.dataset.pre || '') + fmt(+c.dataset.to * k) + (c.dataset.suf || ''); });
     if (k < 1) requestAnimationFrame(tick); }
   requestAnimationFrame(tick);
-  var y = document.getElementById('hYear'), st = performance.now();
-  function yr() { var p = ((performance.now() - st) / 12000) % 1; y.textContent = (p > 0.38 && p < 0.88) ? '2018' : '2000'; }
-  if (!red) setInterval(yr, 250);
 })();
+</script>
+<script type="module">
+import * as THREE from './assets/three.module.min.js';
+const cv = document.getElementById('earth');
+const red = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let r = null;
+try { r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { cv.remove(); }
+if (r) {
+  r.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  r.outputColorSpace = THREE.SRGBColorSpace;
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  cam.position.set(0, 0, 6);
+  const L = new THREE.TextureLoader();
+  const tex = (u, srgb) => { const t = L.load(u); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = r.capabilities.getMaxAnisotropy(); return t; };
+  const day = tex('assets/earth/earth_atmos_2048.jpg', true), night = tex('assets/earth/earth_lights_2048.jpg', true), spec = tex('assets/earth/earth_specular_2048.jpg'), clouds = tex('assets/earth/earth_clouds_1024.png', true);
+  const sun = new THREE.Vector3(-1.0, 0.45, 0.9).normalize();
+  const tilt = new THREE.Group(); scene.add(tilt);
+  const spin = new THREE.Group(); tilt.add(spin);
+  const earthMat = new THREE.ShaderMaterial({
+    uniforms: { day: { value: day }, night: { value: night }, spec: { value: spec }, sun: { value: sun } },
+    vertexShader: 'varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position,1.0); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }',
+    fragmentShader: 'uniform sampler2D day; uniform sampler2D night; uniform sampler2D spec; uniform vec3 sun; varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vec3 n = normalize(vN); float d = dot(n, sun); float k = smoothstep(-0.15, 0.25, d); vec3 dc = texture2D(day, vUv).rgb; vec3 nc = texture2D(night, vUv).rgb * vec3(1.0, 0.82, 0.55) * 1.8; vec3 col = mix(nc, dc * (0.22 + 1.0 * max(d, 0.0)), k); vec3 h = normalize(sun + vV); float sp = pow(max(dot(n, h), 0.0), 40.0) * texture2D(spec, vUv).r * 0.7 * k; col += vec3(0.6, 0.75, 1.0) * sp; float rim = pow(1.0 - max(dot(n, vV), 0.0), 3.0); col += vec3(0.25, 0.55, 1.0) * rim * 0.7 * (0.25 + k); gl_FragColor = vec4(col, 1.0); }'
+  });
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 96), earthMat); spin.add(earth);
+  const cl = new THREE.Mesh(new THREE.SphereGeometry(1.012, 96, 72), new THREE.MeshLambertMaterial({ map: clouds, transparent: true, opacity: 0.55, depthWrite: false }));
+  spin.add(cl);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.06));
+  const dl = new THREE.DirectionalLight(0xffffff, 2.4); dl.position.copy(sun).multiplyScalar(10); scene.add(dl);
+  const atm = new THREE.Mesh(new THREE.SphereGeometry(1.09, 96, 72), new THREE.ShaderMaterial({
+    uniforms: { sun: { value: sun } }, side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+    vertexShader: 'varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position,1.0); vP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }',
+    fragmentShader: 'uniform vec3 sun; varying vec3 vN; varying vec3 vP; void main(){ vec3 v = normalize(cameraPosition - vP); float i = pow(max(0.62 - dot(vN, v), 0.0), 2.4); float lit = 0.35 + 0.65 * smoothstep(-0.4, 0.6, dot(vN, sun)); gl_FragColor = vec4(vec3(0.3, 0.6, 1.0) * i * 1.6 * lit, 1.0); }'
+  }));
+  tilt.add(atm);
+  const lon = 60, lat = 45.0, u = (lon + 180) / 360, phi = lat * Math.PI / 180;
+  const P = new THREE.Vector3(-Math.cos(2 * Math.PI * u) * Math.cos(phi), Math.sin(phi), Math.sin(2 * Math.PI * u) * Math.cos(phi));
+  const pin = new THREE.Group(); pin.position.copy(P.clone().multiplyScalar(1.006)); pin.lookAt(P.clone().multiplyScalar(2)); spin.add(pin);
+  pin.add(new THREE.Mesh(new THREE.CircleGeometry(0.018, 32), new THREE.MeshBasicMaterial({ color: 0x4fd8d0 })));
+  const ringM = new THREE.MeshBasicMaterial({ color: 0x4fd8d0, transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false });
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.03, 0.037, 48), ringM); pin.add(ring);
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.3, 8), new THREE.MeshBasicMaterial({ color: 0x4fd8d0, transparent: true, opacity: 0.75 }));
+  beam.rotation.x = Math.PI / 2; beam.position.z = 0.15; pin.add(beam);
+  const lc = document.createElement('canvas'); lc.width = 640; lc.height = 140; const g = lc.getContext('2d');
+  g.font = '700 52px -apple-system, Inter, Segoe UI, sans-serif'; g.fillStyle = '#fff'; g.fillText('Aral Sea', 8, 60); g.font = '500 32px -apple-system, Inter, Segoe UI, sans-serif'; g.fillStyle = 'rgba(160,235,230,.95)'; g.fillText('Uzbekistan · −88% since 1960', 8, 112);
+  const lt = new THREE.CanvasTexture(lc); lt.colorSpace = THREE.SRGBColorSpace;
+  const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: lt, transparent: true, depthTest: false })); label.scale.set(0.74, 0.162, 1); label.center.set(0, 0.5); scene.add(label);
+  const N = 2200, sp = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) { const v = new THREE.Vector3().randomDirection().multiplyScalar(30 + Math.random() * 20); sp.set([v.x, v.y, v.z], i * 3); }
+  const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.85, sizeAttenuation: true })); scene.add(stars);
+  const a0 = Math.atan2(-P.x, P.z); let OFF = 0;
+  tilt.rotation.z = -0.12;
+  let narrowL = false, mx = 0, my = 0, tmx = 0, tmy = 0;
+  addEventListener('pointermove', e => { tmx = e.clientX / innerWidth - 0.5; tmy = e.clientY / innerHeight - 0.5; }, { passive: true });
+  function size() {
+    const w = cv.clientWidth, h = cv.clientHeight; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    const narrow = w < 900;
+    if (narrow) {
+      const cr = cv.getBoundingClientRect(), st = document.querySelector('.hstats').getBoundingClientRect(), half = Math.tan(THREE.MathUtils.degToRad(16)) * 6;
+      const cy = st.top - cr.top - Math.min(w * 0.46, 200), rad = Math.min(w * 0.4, 175);
+      tilt.position.set(0, (0.5 - cy / h) * 2 * half, 0); tilt.scale.setScalar(rad / (h / 2) * half); OFF = -0.35;
+    }
+    else { tilt.position.set(Math.min(2.35, 1.2 * w / h), -0.05, 0); tilt.scale.setScalar(1.25); OFF = -1.0; }
+    narrowL = narrow;
+  }
+  addEventListener('resize', size); size();
+  const wp = new THREE.Vector3(), cp = new THREE.Vector3(), clock = new THREE.Clock(); let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(cv);
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!visible) return;
+    const t = clock.getElapsedTime();
+    mx += (tmx - mx) * 0.04; my += (tmy - my) * 0.04;
+    spin.rotation.y = a0 + OFF + (red ? 0 : Math.sin(t * 0.09) * 0.22) + mx * 0.3;
+    tilt.rotation.x = 0.5 + my * 0.12;
+    cl.rotation.y = red ? 0 : t * 0.01;
+    stars.rotation.y = t * 0.004;
+    const pul = (t * 0.6) % 1; ring.scale.setScalar(1 + pul * 2.4); ringM.opacity = 0.85 * (1 - pul);
+    pin.getWorldPosition(wp); cp.copy(wp).sub(tilt.position).normalize();
+    const facing = cp.dot(cam.position.clone().sub(wp).normalize());
+    if (narrowL) { label.center.set(0.5, 0); label.position.copy(wp).add(new THREE.Vector3(0, 0.08, 0.2)); } else { label.center.set(0, 0.5); label.position.copy(wp).add(new THREE.Vector3(0.07, 0.09, 0.2)); } label.material.opacity = Math.max(0, Math.min(1, (facing - 0.15) * 4));
+    r.render(scene, cam);
+  }
+  frame();
+}
 </script>
 <script src="assets/auth-config.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>

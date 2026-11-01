@@ -83,7 +83,7 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .hstats { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; margin-top: clamp(40px, 7vh, 80px); padding-bottom: 70px; }
 .hstats div { padding: 16px 18px; border-radius: 18px; background: rgba(20,20,22,.55); border: 1px solid rgba(255,255,255,.1); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); min-width: 0; }
 .hstats b, .hy { display: block; font-size: clamp(1.5rem, 3vw, 2.3rem); font-weight: 700; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
-.hy { color: #4fd8d0; }
+.hstats div:nth-child(2) b { color: #ff9f43; } .hstats div:nth-child(1) b { color: #4fd8d0; }
 .hstats b.neg { color: #ff9f43; }
 .hl { font-size: .82rem; color: #a1a1a6; }
 .hcue { position: absolute; z-index: 2; left: 50%; bottom: 18px; width: 26px; height: 42px; margin-left: -13px; border: 2px solid rgba(255,255,255,.5); border-radius: 99px; }
@@ -96,7 +96,7 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .hstats { animation: hup .9s .5s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes hup { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
 @media (max-width: 900px) {
-  .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: min(92vw, 420px); }
+  .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: min(118vw, 500px); }
   .hlogo { display: none; }
   .hero::before { background: linear-gradient(180deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.15) 45%, transparent 70%, #000 100%); }
 }
@@ -452,16 +452,16 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 <header class="hero" id="top">
   <canvas id="earth" class="earth" aria-label="A slowly turning 3D Earth seen from space, with a glowing marker on the Aral Sea in Uzbekistan" role="img"></canvas>
   <div class="hin in">
-    <p class="hkick"><span class="live"></span>NASA Earth data · Built in Uzbekistan</p>
+    <p class="hkick"><span class="live"></span>Powered by NASA Earth data</p>
     <h1 class="htitle">See Earth<br><span class="hgrad">change.</span></h1>
-    <p class="sub">Eco-X turns satellite data into answers anyone can explore, starting with the Aral Sea, one of the fastest-changing places on Earth.</p>
+    <p class="sub">Eco-X turns satellite data into clear answers anyone can explore. What is changing, where, how fast, and is it real.</p>
     <div class="cta"><a class="btn" href="#pulse">Explore the map</a><a class="btn ghost" href="#story">Watch the story ↓</a></div>
   </div>
-  <div class="hstats in" aria-label="Aral Sea in numbers">
-    <div><span class="hy">Aral Sea</span><span class="hl">45°N 60°E · Uzbekistan</span></div>
-    <div><b class="cnt" data-to="68000" data-suf=" km²">0</b><span class="hl">water in 1960</span></div>
-    <div><b class="cnt" data-to="8321" data-suf=" km²">0</b><span class="hl">left in 2018</span></div>
-    <div><b class="cnt neg" data-to="88" data-pre="−" data-suf="%">0</b><span class="hl">of the sea, gone</span></div>
+  <div class="hstats in" aria-label="Earth in numbers">
+    <div><b class="cnt" data-to="146">0</b><span class="hl">years of NASA temperature records</span></div>
+    <div><b class="cnt" data-to="1.28" data-dec="2" data-pre="+" data-suf=" °C">0</b><span class="hl">2024, warmest year on record</span></div>
+    <div><b class="cnt" data-to="427" data-suf=" ppm">0</b><span class="hl">CO₂ in the air, 2025</span></div>
+    <div><b class="cnt" data-to="4">0</b><span class="hl">NASA satellite missions</span></div>
   </div>
   <a class="hcue" href="#story" aria-label="Scroll down"><i></i></a>
 </header>
@@ -983,9 +983,9 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 (function () {
   var red = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var cs = document.querySelectorAll('.hstats .cnt'), t0 = null;
-  function fmt(v) { return Math.round(v).toLocaleString('en-US'); }
+  function fmt(v, d) { return d ? v.toFixed(d) : Math.round(v).toLocaleString('en-US'); }
   function tick(t) { if (!t0) t0 = t; var k = red ? 1 : Math.min(1, (t - t0 - 600) / 1800); k = k < 0 ? 0 : 1 - Math.pow(1 - k, 3);
-    Array.prototype.forEach.call(cs, function (c) { c.textContent = (c.dataset.pre || '') + fmt(+c.dataset.to * k) + (c.dataset.suf || ''); });
+    Array.prototype.forEach.call(cs, function (c) { c.textContent = (c.dataset.pre || '') + fmt(+c.dataset.to * k, +(c.dataset.dec || 0)) + (c.dataset.suf || ''); });
     if (k < 1) requestAnimationFrame(tick); }
   requestAnimationFrame(tick);
 })();
@@ -1011,7 +1011,7 @@ if (r) {
   const earthMat = new THREE.ShaderMaterial({
     uniforms: { day: { value: day }, night: { value: night }, spec: { value: spec }, sun: { value: sun } },
     vertexShader: 'varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position,1.0); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }',
-    fragmentShader: 'uniform sampler2D day; uniform sampler2D night; uniform sampler2D spec; uniform vec3 sun; varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vec3 n = normalize(vN); float d = dot(n, sun); float k = smoothstep(-0.15, 0.25, d); vec3 dc = texture2D(day, vUv).rgb; vec3 nc = texture2D(night, vUv).rgb * vec3(1.0, 0.82, 0.55) * 1.8; vec3 col = mix(nc, dc * (0.22 + 1.0 * max(d, 0.0)), k); vec3 h = normalize(sun + vV); float sp = pow(max(dot(n, h), 0.0), 40.0) * texture2D(spec, vUv).r * 0.7 * k; col += vec3(0.6, 0.75, 1.0) * sp; float rim = pow(1.0 - max(dot(n, vV), 0.0), 3.0); col += vec3(0.25, 0.55, 1.0) * rim * 0.7 * (0.25 + k); gl_FragColor = vec4(col, 1.0); }'
+    fragmentShader: 'uniform sampler2D day; uniform sampler2D night; uniform sampler2D spec; uniform vec3 sun; varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vec3 n = normalize(vN); float d = dot(n, sun); float k = smoothstep(-0.15, 0.25, d); vec3 dc = texture2D(day, vUv).rgb; vec3 nc = texture2D(night, vUv).rgb * vec3(1.0, 0.82, 0.55) * 1.8; vec3 col = mix(nc, dc * (0.22 + 1.0 * max(d, 0.0)), k); vec3 h = normalize(sun + vV); float sp = pow(max(dot(n, h), 0.0), 90.0) * texture2D(spec, vUv).r * 0.35 * k; col += vec3(0.6, 0.75, 1.0) * sp; float rim = pow(1.0 - max(dot(n, vV), 0.0), 3.0); col += vec3(0.25, 0.55, 1.0) * rim * 0.7 * (0.25 + k); gl_FragColor = vec4(col, 1.0); }'
   });
   const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 96), earthMat); spin.add(earth);
   const cl = new THREE.Mesh(new THREE.SphereGeometry(1.012, 96, 72), new THREE.MeshLambertMaterial({ map: clouds, transparent: true, opacity: 0.55, depthWrite: false }));
@@ -1024,23 +1024,10 @@ if (r) {
     fragmentShader: 'uniform vec3 sun; varying vec3 vN; varying vec3 vP; void main(){ vec3 v = normalize(cameraPosition - vP); float i = pow(max(0.62 - dot(vN, v), 0.0), 2.4); float lit = 0.35 + 0.65 * smoothstep(-0.4, 0.6, dot(vN, sun)); gl_FragColor = vec4(vec3(0.3, 0.6, 1.0) * i * 1.6 * lit, 1.0); }'
   }));
   tilt.add(atm);
-  const lon = 60, lat = 45.0, u = (lon + 180) / 360, phi = lat * Math.PI / 180;
-  const P = new THREE.Vector3(-Math.cos(2 * Math.PI * u) * Math.cos(phi), Math.sin(phi), Math.sin(2 * Math.PI * u) * Math.cos(phi));
-  const pin = new THREE.Group(); pin.position.copy(P.clone().multiplyScalar(1.006)); pin.lookAt(P.clone().multiplyScalar(2)); spin.add(pin);
-  pin.add(new THREE.Mesh(new THREE.CircleGeometry(0.018, 32), new THREE.MeshBasicMaterial({ color: 0x4fd8d0 })));
-  const ringM = new THREE.MeshBasicMaterial({ color: 0x4fd8d0, transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false });
-  const ring = new THREE.Mesh(new THREE.RingGeometry(0.03, 0.037, 48), ringM); pin.add(ring);
-  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.3, 8), new THREE.MeshBasicMaterial({ color: 0x4fd8d0, transparent: true, opacity: 0.75 }));
-  beam.rotation.x = Math.PI / 2; beam.position.z = 0.15; pin.add(beam);
-  const lc = document.createElement('canvas'); lc.width = 640; lc.height = 140; const g = lc.getContext('2d');
-  g.font = '700 52px -apple-system, Inter, Segoe UI, sans-serif'; g.fillStyle = '#fff'; g.fillText('Aral Sea', 8, 60); g.font = '500 32px -apple-system, Inter, Segoe UI, sans-serif'; g.fillStyle = 'rgba(160,235,230,.95)'; g.fillText('Uzbekistan · −88% since 1960', 8, 112);
-  const lt = new THREE.CanvasTexture(lc); lt.colorSpace = THREE.SRGBColorSpace;
-  const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: lt, transparent: true, depthTest: false })); label.scale.set(0.74, 0.162, 1); label.center.set(0, 0.5); scene.add(label);
   const N = 2200, sp = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) { const v = new THREE.Vector3().randomDirection().multiplyScalar(30 + Math.random() * 20); sp.set([v.x, v.y, v.z], i * 3); }
   const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
   const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.85, sizeAttenuation: true })); scene.add(stars);
-  const a0 = Math.atan2(-P.x, P.z); let OFF = 0;
   tilt.rotation.z = -0.12;
   let narrowL = false, mx = 0, my = 0, tmx = 0, tmy = 0;
   addEventListener('pointermove', e => { tmx = e.clientX / innerWidth - 0.5; tmy = e.clientY / innerHeight - 0.5; }, { passive: true });
@@ -1049,10 +1036,9 @@ if (r) {
     const narrow = w < 900;
     if (narrow) {
       const cr = cv.getBoundingClientRect(), st = document.querySelector('.hstats').getBoundingClientRect(), half = Math.tan(THREE.MathUtils.degToRad(16)) * 6;
-      const cy = st.top - cr.top - Math.min(w * 0.46, 200), rad = Math.min(w * 0.4, 175);
-      tilt.position.set(0, (0.5 - cy / h) * 2 * half, 0); tilt.scale.setScalar(rad / (h / 2) * half); OFF = -0.35;
-    }
-    else { tilt.position.set(Math.min(2.35, 1.2 * w / h), -0.05, 0); tilt.scale.setScalar(1.25); OFF = -1.0; }
+      const rad = Math.min(w * 0.5, 230), cy = st.top - cr.top - rad * 0.95;
+      tilt.position.set(0, (0.5 - cy / h) * 2 * half, 0); tilt.scale.setScalar(rad / (h / 2) * half);
+    } else { tilt.position.set(Math.min(2.6, 1.35 * w / h), -0.35, -0.5); tilt.scale.setScalar(1.75); }
     narrowL = narrow;
   }
   addEventListener('resize', size); size();
@@ -1063,14 +1049,10 @@ if (r) {
     if (!visible) return;
     const t = clock.getElapsedTime();
     mx += (tmx - mx) * 0.04; my += (tmy - my) * 0.04;
-    spin.rotation.y = a0 + OFF + (red ? 0 : Math.sin(t * 0.09) * 0.22) + mx * 0.3;
-    tilt.rotation.x = 0.5 + my * 0.12;
+    spin.rotation.y = -2.25 + (red ? 0 : t * 0.03) + mx * 0.25;
+    tilt.rotation.x = 0.35 + my * 0.1;
     cl.rotation.y = red ? 0 : t * 0.01;
     stars.rotation.y = t * 0.004;
-    const pul = (t * 0.6) % 1; ring.scale.setScalar(1 + pul * 2.4); ringM.opacity = 0.85 * (1 - pul);
-    pin.getWorldPosition(wp); cp.copy(wp).sub(tilt.position).normalize();
-    const facing = cp.dot(cam.position.clone().sub(wp).normalize());
-    if (narrowL) { label.center.set(0.5, 0); label.position.copy(wp).add(new THREE.Vector3(0, 0.08, 0.2)); } else { label.center.set(0, 0.5); label.position.copy(wp).add(new THREE.Vector3(0.07, 0.09, 0.2)); } label.material.opacity = Math.max(0, Math.min(1, (facing - 0.15) * 4));
     r.render(scene, cam);
   }
   frame();

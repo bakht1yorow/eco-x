@@ -86,6 +86,12 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .hstats div:nth-child(2) b { color: #ff9f43; } .hstats div:nth-child(1) b { color: #4fd8d0; }
 .hstats b.neg { color: #ff9f43; }
 .hl { font-size: .82rem; color: #a1a1a6; }
+.pin { position: absolute; z-index: 2; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity .8s; display: flex; align-items: center; gap: 8px; font-size: .78rem; font-weight: 600; letter-spacing: .02em; color: #f5f5f7; white-space: nowrap; transform: translate(-50%, -50%); }
+.pin.on { opacity: 1; }
+@media (max-width: 900px) { .pin { display: none; } }
+.pin i { width: 10px; height: 10px; border-radius: 50%; background: #4fd8d0; box-shadow: 0 0 0 3px rgba(79,216,208,.25), 0 0 14px rgba(79,216,208,.8); animation: pinp 2.4s ease-out infinite; flex: none; }
+.pin span { padding: 3px 9px; border-radius: 99px; background: rgba(20,20,22,.6); border: 1px solid rgba(255,255,255,.14); }
+@keyframes pinp { 0% { box-shadow: 0 0 0 0 rgba(79,216,208,.6), 0 0 14px rgba(79,216,208,.8); } 100% { box-shadow: 0 0 0 16px rgba(79,216,208,0), 0 0 14px rgba(79,216,208,.8); } }
 .hcue { position: absolute; z-index: 2; left: 50%; bottom: 18px; width: 26px; height: 42px; margin-left: -13px; border: 2px solid rgba(255,255,255,.5); border-radius: 99px; }
 .hcue i { position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: #fff; animation: cue 1.6s ease-in-out infinite; }
 @keyframes cue { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
@@ -463,6 +469,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     <div><b class="cnt" data-to="427" data-suf=" ppm">0</b><span class="hl">CO₂ in the air, 2025</span></div>
     <div><b class="cnt" data-to="4">0</b><span class="hl">NASA satellite missions</span></div>
   </div>
+  <div class="pin" id="pin" aria-hidden="true"><i></i><span>Aral Sea</span></div>
   <a class="hcue" href="#story" aria-label="Scroll down"><i></i></a>
 </header>
 
@@ -1006,7 +1013,10 @@ if (r) {
   const tex = (u, srgb) => { const t = L.load(u); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = r.capabilities.getMaxAnisotropy(); return t; };
   const day = tex('assets/earth/earth_atmos_2048.jpg', true), night = tex('assets/earth/earth_lights_2048.jpg', true), clouds = tex('assets/earth/earth_clouds_1024.png');
   // low sun on the left: dawn side lit, the rest in night, like an orbital photo
-  const sun = new THREE.Vector3(-0.85, 0.12, 0.2).normalize();
+  // the Aral Sea (45N, 60E) is turned to face the camera, in morning light
+  const aralLocal = new THREE.Vector3(-Math.cos(2 * Math.PI * (240 / 360)) * Math.cos(0.7854), Math.sin(0.7854), Math.sin(2 * Math.PI * (240 / 360)) * Math.cos(0.7854)).normalize();
+  const aimW = new THREE.Vector3(0.2, 0.95, 0.24).normalize();
+  const sun = new THREE.Vector3().copy(aimW).multiplyScalar(0.5).add(new THREE.Vector3(-0.78, 0.12, 0.05)).normalize();
   const spec = tex('assets/earth/earth_specular_2048.jpg', false);
   const ctr = new THREE.Vector3(), Rv = { value: 1 };
   const globe = new THREE.Group(); scene.add(globe);
@@ -1084,7 +1094,15 @@ if (r) {
     vertexShader: 'attribute float s; uniform float t; uniform float pr; varying float a; void main(){ a = 0.35 + 0.65 * (0.5 + 0.5 * sin(t * (0.5 + s * 2.0) + s * 40.0)); a *= 0.3 + 0.7 * s; gl_PointSize = (0.8 + s * 1.8) * pr; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: 'varying float a; void main(){ vec2 p = gl_PointCoord - 0.5; float d = length(p); if (d > 0.5) discard; gl_FragColor = vec4(vec3(0.85, 0.92, 1.0), a * smoothstep(0.5, 0.0, d)); }' });
   scene.add(new THREE.Points(sg, starMat));
-  globe.rotation.set(-1.25, 0, 0.1);
+  const qBase = new THREE.Quaternion().setFromUnitVectors(aralLocal, aimW);
+  { // roll so that north points up on screen
+    const nw = new THREE.Vector3(0, 1, 0).applyQuaternion(qBase), up = new THREE.Vector3(0, 1, 0);
+    const pn = nw.clone().sub(aimW.clone().multiplyScalar(nw.dot(aimW))).normalize(), pu = up.clone().sub(aimW.clone().multiplyScalar(up.dot(aimW))).normalize();
+    const ang = Math.atan2(new THREE.Vector3().crossVectors(pn, pu).dot(aimW), pn.dot(pu));
+    qBase.premultiply(new THREE.Quaternion().setFromAxisAngle(aimW, ang));
+  }
+  spin.quaternion.copy(qBase);
+  const pinEl = document.getElementById('pin'), pv = new THREE.Vector3();
   let mx = 0, my = 0, tmx = 0, tmy = 0;
   addEventListener('pointermove', e => { tmx = e.clientX / innerWidth - 0.5; tmy = e.clientY / innerHeight - 0.5; }, { passive: true });
   const D = 60;
@@ -1109,7 +1127,12 @@ if (r) {
     if (!visible) return;
     const t = clock.getElapsedTime();
     mx += (tmx - mx) * 0.03; my += (tmy - my) * 0.03;
-    spin.rotation.y = -2.0 + (red ? 0 : t * 0.012);
+    if (!red) spin.quaternion.copy(qBase).premultiply(new THREE.Quaternion().setFromAxisAngle(aimW, Math.sin(t * 0.08) * 0.03));
+    pv.copy(aralLocal).applyQuaternion(spin.quaternion).multiplyScalar(Rv.value).add(ctr);
+    const facing = pv.clone().sub(ctr).normalize().dot(cam.position.clone().sub(pv).normalize());
+    pv.project(cam); const hr = cv.getBoundingClientRect();
+    pinEl.style.left = ((pv.x * 0.5 + 0.5) * hr.width) + 'px'; pinEl.style.top = ((-pv.y * 0.5 + 0.5) * hr.height) + 'px';
+    pinEl.classList.toggle('on', facing > 0.05);
     earth.material.uniforms.cshift.value = red ? 0 : t * 0.0015;
     cam.position.x = mx * 1.2; cam.position.y = -my * 0.8; cam.lookAt(0, 0, -D);
     starMat.uniforms.t.value = t;

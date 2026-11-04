@@ -1188,7 +1188,7 @@ if (r) {
       auth.signInWithPhoneNumber(num, phVerifier).then(function (c) {
         phConfirm = c; $('phCode').hidden = false; $('phCode').focus(); $('phGo').textContent = 'Verify code'; $('phGo').disabled = false;
         $('aErr').textContent = 'We sent a code by SMS.';
-      }).catch(function (err) { $('phGo').disabled = false; try { phVerifier.clear(); } catch (x) {} phVerifier = null; $('aErr').textContent = nice(err); });
+      }).catch(function (err) { $('phGo').disabled = false; try { phVerifier.clear(); } catch (x) {} phVerifier = null; try { console.warn('phone sign-in error', err && err.code, err && err.message); } catch (x) {} var m = nice(err); $('aErr').textContent = m + (m.indexOf('did not work') >= 0 && err && err.code ? ' (' + err.code.replace('auth/', '') + ')' : ''); });
     } else {
       var code = $('phCode').value.trim();
       if (!/^\d{6}$/.test(code)) { $('aErr').textContent = 'Enter the 6-digit code.'; return; }

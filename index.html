@@ -106,7 +106,6 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .story { position: relative; height: 360vh; background: #000; }
 .story .sticky { position: sticky; top: 48px; height: calc(100vh - 48px); overflow: hidden; display: grid; place-items: center; }
 .story .frame { position: relative; width: min(86vh, 92vw); aspect-ratio: 1; border-radius: 28px; overflow: hidden; box-shadow: 0 40px 120px -20px rgba(41,151,255,.25); }
-.story #sC, .story #sD, .story #sA { object-position: 100% 50%; }
 .story img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: opacity, transform; }
 .story .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 62%, rgba(0,0,0,.65) 100%); pointer-events: none; }
 .story .cap { position: absolute; left: 0; right: 0; top: clamp(18px, 4vh, 40px); text-align: center; color: #fff; padding: 0 20px; }
@@ -469,18 +468,16 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
   <a class="hcue" href="#story" aria-label="Scroll down"><i></i></a>
 </header>
 
-<section class="story" id="story" aria-label="The Aral Sea from space, 1973 to 2018">
+<section class="story" id="story" aria-label="The Aral Sea from space, 2000 to 2018">
   <div class="sticky">
     <div class="frame">
-      <img id="sC" src="https://svs.gsfc.nasa.gov/vis/a000000/a002100/a002117/aral.date.1973.jpg" alt="Landsat-1 photo of the central Aral Sea, 29 May 1973, the sea still large" onerror="this.onerror=null;this.src='assets/aral_1960.jpg'">
-      <img id="sD" src="https://svs.gsfc.nasa.gov/vis/a000000/a002100/a002117/aral.date.1987.jpg" alt="Landsat-4 photo of the central Aral Sea, 19 August 1987, the shores pulling back" style="opacity:0">
-      <img id="sA" src="https://svs.gsfc.nasa.gov/vis/a000000/a002100/a002117/aral.date.2000.jpg" alt="Landsat-7 photo of the central Aral Sea, 29 July 2000, the sea split in two" style="opacity:0">
+      <img id="sA" alt="NASA MODIS image of the whole Aral Sea in August 2000 with the 1960 shoreline in yellow">
       <img id="sB" alt="NASA MODIS image of the whole Aral Sea in August 2018, mostly dry" style="opacity:0">
       <div class="shade"></div>
-      <div class="cap"><div class="yr" id="sYr">1960</div><div class="msg" id="sMsg">The yellow line is where the shore was.</div></div>
-      <div class="area"><b id="sArea">68,000 km²</b><span id="sAreaL">of water<sup><a href="#fn2">2</a></sup></span></div>
-      <span class="credit" id="sCredit">NASA/GSFC Scientific Visualization Studio · Landsat-1, 29 May 1973</span>
-      <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="cap"><div class="yr" id="sYr">2000</div><div class="msg" id="sMsg">The yellow line is where the shore was in 1960.</div></div>
+      <div class="area"><b id="sArea">68,000 → 17,160 km²</b><span id="sAreaL">from 1960 to 2004<sup><a href="#fn2">2</a></sup></span></div>
+      <span class="credit" id="sCredit">NASA Earth Observatory · MODIS</span>
+      <div class="dots" aria-hidden="true"><i class="on"></i><i></i></div>
     </div>
   </div>
 </section>
@@ -680,7 +677,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 
 <footer class="foot"><div class="in">
   <ol>
-    <li id="fn1">The first three views are real Landsat photos of the central Aral Sea in one frame, from 29 May 1973, 19 August 1987 and 29 July 2000 (NASA/GSFC Scientific Visualization Studio). No satellite photographed the sea in 1960, so the 1960 area is from the cited study. The last view zooms out to the whole sea. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
+    <li id="fn1">No satellite photographed the sea in 1960, so the 1960 area is from the cited study and the yellow line is NASA's approximate 1960 shoreline. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
     <li id="fn2">Aral Sea area: 1960 (68,000 km²) and 2010 from <a href="https://link.springer.com/article/10.1007/s13201-012-0048-z" target="_blank" rel="noopener">Applied Water Science, 2012</a>; 1998, 2004, 2018 and North Aral values from <a href="https://en.wikipedia.org/wiki/Aral_Sea" target="_blank" rel="noopener">Wikipedia, Aral Sea</a>. Different studies, so approximate.</li>
     <li id="fn3">Global temperature: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISTEMP v4</a>, annual anomaly vs 1951–1980. Carbon dioxide: <a href="https://gml.noaa.gov/ccgg/trends/" target="_blank" rel="noopener">NOAA GML</a>, Mauna Loa annual mean. Both via open <a href="https://github.com/datasets" target="_blank" rel="noopener">datasets</a> packages.</li>
     <li id="fn4">Tracker factors: UK government greenhouse gas conversion factors 2024: average petrol car 0.1645, local bus 0.10846 and national rail 0.03546 kg CO₂ per km, as listed by <a href="https://www.dur.ac.uk/media/durham-university/professional-services/energy-and-sustainability-team/CO2-conversion-factors-2023-24.pdf" target="_blank" rel="noopener">Durham University</a>. Shower flow of 9 L/min is an assumption.</li>
@@ -778,23 +775,20 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 
   // ---------- sticky satellite story ----------
   (function () {
-    var A = $('sA'), B = $('sB'), C = $('sC'), D = $('sD'); B.src = IMG.y2018;
-    var SVS = 'NASA/GSFC Scientific Visualization Studio · Landsat', EO = 'NASA Earth Observatory · MODIS';
+    var A = $('sA'), B = $('sB'); A.src = IMG.y2000; B.src = IMG.y2018;
+    var EO = 'NASA Earth Observatory · MODIS';
     var steps = [
-      { yr: '1973', msg: 'The first satellite photo. The sea was still huge.', area: '68,000 km²', l: 'in 1960, when the shrinking began', c: SVS + '-1, 29 May 1973' },
-      { yr: '1987', msg: 'By 1987, the shores were pulling back.', area: '68,000 → 28,687 km²', l: 'from 1960 to 1998', c: SVS + '-4, 19 August 1987' },
-      { yr: '2000', msg: 'By 2000, the sea had split in two.', area: '28,687 → 17,160 km²', l: 'the 1998 and 2004 records', c: SVS + '-7, 29 July 2000' },
-      { yr: '2018', msg: 'Zoom out: by 2018, most of it was gone.', area: '8,321 km²', l: 'left, about 12%', c: EO + ', 21 August 2018 · whole sea' }
+      { yr: '2000', msg: 'The yellow line is where the shore was in 1960.', area: '68,000 → 17,160 km²', l: 'from 1960 to 2004', c: EO + ', 25 August 2000' },
+      { yr: '2018', msg: 'By 2018, most of it was gone.', area: '8,321 km²', l: 'left, about 12%', c: EO + ', 21 August 2018' }
     ];
     var st = $('story'), dots = st.querySelectorAll('.dots i'), lastI = -1, queued = false;
-    function ramp(p, a, w) { return Math.max(0, Math.min(1, (p - a) / w)).toFixed(3); }
     function upd() {
       queued = false;
       var r = st.getBoundingClientRect(), tot = r.height - window.innerHeight, p = Math.max(0, Math.min(1, -r.top / (tot || 1)));
-      var i = p < 0.2 ? 0 : p < 0.44 ? 1 : p < 0.68 ? 2 : 3;
-      D.style.opacity = ramp(p, 0.14, 0.1); A.style.opacity = ramp(p, 0.38, 0.1); B.style.opacity = ramp(p, 0.62, 0.1);
-      var sc = reduce ? 1 : 1.12 - 0.12 * Math.min(1, p / 0.6);
-      C.style.transform = D.style.transform = A.style.transform = B.style.transform = 'scale(' + sc.toFixed(4) + ')';
+      var i = p < 0.5 ? 0 : 1;
+      B.style.opacity = Math.max(0, Math.min(1, (p - 0.42) / 0.16)).toFixed(3);
+      var sc = reduce ? 1 : 1.18 - 0.18 * Math.min(1, p / 0.5);
+      A.style.transform = B.style.transform = 'scale(' + sc.toFixed(4) + ')';
       if (i !== lastI) {
         lastI = i; var s = steps[i];
         $('sCredit').textContent = s.c; $('sYr').textContent = s.yr; $('sMsg').textContent = s.msg; $('sArea').textContent = s.area;

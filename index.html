@@ -468,16 +468,16 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
   <a class="hcue" href="#story" aria-label="Scroll down"><i></i></a>
 </header>
 
-<section class="story" id="story" aria-label="The Aral Sea from space, 1960 to 2018">
+<section class="story" id="story" aria-label="The Aral Sea from space, 1973 to 2018">
   <div class="sticky">
     <div class="frame">
-      <img id="sC" src="assets/aral_1960.jpg" alt="Illustration of the Aral Sea filled to its 1960 shoreline, drawn on a NASA MODIS image">
+      <img id="sC" src="https://svs.gsfc.nasa.gov/vis/a000000/a002100/a002117/aral.date.1973.jpg" alt="Landsat-1 satellite photo of the Aral Sea, 29 May 1973, the sea still large" onerror="this.onerror=null;this.src='assets/aral_1960.jpg'">
       <img id="sA" alt="NASA MODIS image of the Aral Sea in August 2000 with the 1960 shoreline in yellow" style="opacity:0">
       <img id="sB" alt="NASA MODIS image of the Aral Sea in August 2018, mostly dry" style="opacity:0">
       <div class="shade"></div>
       <div class="cap"><div class="yr" id="sYr">1960</div><div class="msg" id="sMsg">The yellow line is where the shore was.</div></div>
       <div class="area"><b id="sArea">68,000 km²</b><span id="sAreaL">of water<sup><a href="#fn2">2</a></sup></span></div>
-      <span class="credit" id="sCredit">NASA Earth Observatory · MODIS · 1960 water drawn in</span>
+      <span class="credit" id="sCredit">NASA/GSFC Scientific Visualization Studio · Landsat-1, 29 May 1973</span>
       <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
   </div>
@@ -678,7 +678,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 
 <footer class="foot"><div class="in">
   <ol>
-    <li id="fn1">The 1960 view is an illustration: no satellite photographed the sea then, so we filled water inside NASA's approximate 1960 shoreline on the 2000 image. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
+    <li id="fn1">The first view is a real Landsat-1 photo from 29 May 1973 (NASA/GSFC Scientific Visualization Studio); no satellite photographed the sea in 1960, so the 1960 area is from the cited study. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
     <li id="fn2">Aral Sea area: 1960 (68,000 km²) and 2010 from <a href="https://link.springer.com/article/10.1007/s13201-012-0048-z" target="_blank" rel="noopener">Applied Water Science, 2012</a>; 1998, 2004, 2018 and North Aral values from <a href="https://en.wikipedia.org/wiki/Aral_Sea" target="_blank" rel="noopener">Wikipedia, Aral Sea</a>. Different studies, so approximate.</li>
     <li id="fn3">Global temperature: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISTEMP v4</a>, annual anomaly vs 1951–1980. Carbon dioxide: <a href="https://gml.noaa.gov/ccgg/trends/" target="_blank" rel="noopener">NOAA GML</a>, Mauna Loa annual mean. Both via open <a href="https://github.com/datasets" target="_blank" rel="noopener">datasets</a> packages.</li>
     <li id="fn4">Tracker factors: UK government greenhouse gas conversion factors 2024: average petrol car 0.1645, local bus 0.10846 and national rail 0.03546 kg CO₂ per km, as listed by <a href="https://www.dur.ac.uk/media/durham-university/professional-services/energy-and-sustainability-team/CO2-conversion-factors-2023-24.pdf" target="_blank" rel="noopener">Durham University</a>. Shower flow of 9 L/min is an assumption.</li>
@@ -778,7 +778,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
   (function () {
     var A = $('sA'), B = $('sB'), C = $('sC'); A.src = IMG.y2000; B.src = IMG.y2018;
     var steps = [
-      { yr: '1960', msg: 'The sea reached the yellow line.', area: '68,000 km²', l: 'of water' },
+      { yr: '1973', msg: 'The first satellite photo. The sea was still huge.', area: '68,000 km²', l: 'in 1960, when the shrinking began' },
       { yr: '2000', msg: 'By 2000, the sea had split in two.', area: '28,687 → 17,160 km²', l: 'the 1998 and 2004 records' },
       { yr: '2018', msg: 'By 2018, most of it was gone.', area: '8,321 km²', l: 'left, about 12%' }
     ];
@@ -794,7 +794,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
       A.style.transform = B.style.transform = C.style.transform = 'scale(' + sc.toFixed(4) + ')';
       if (i !== lastI) {
         lastI = i; var s = steps[i];
-        $('sCredit').textContent = i === 0 ? 'NASA Earth Observatory · MODIS · 1960 water drawn in (no satellite image exists)' : 'NASA Earth Observatory · MODIS'; $('sYr').textContent = s.yr; $('sMsg').textContent = s.msg; $('sArea').textContent = s.area;
+        $('sCredit').textContent = i === 0 ? 'NASA/GSFC Scientific Visualization Studio · Landsat-1, 29 May 1973' : 'NASA Earth Observatory · MODIS'; $('sYr').textContent = s.yr; $('sMsg').textContent = s.msg; $('sArea').textContent = s.area;
         $('sAreaL').innerHTML = esc(s.l) + '<sup><a href="#fn2">2</a></sup>';
         Array.prototype.forEach.call(dots, function (d, k) { d.classList.toggle('on', k === i); });
       }

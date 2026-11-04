@@ -471,13 +471,13 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 <section class="story" id="story" aria-label="The Aral Sea from space, 1962 to 2018">
   <div class="sticky">
     <div class="frame">
-      <img id="sC" src="assets/aral_1962.jpg" alt="Black-and-white US satellite photo of the Aral Sea, 18 May 1962, the sea still full">
+      <img id="sC" src="assets/aral_1962_color.jpg" alt="Colourised US satellite photo of the Aral Sea, 18 May 1962, the sea still full">
       <img id="sA" alt="NASA MODIS image of the whole Aral Sea in August 2000 with the 1960 shoreline in yellow" style="opacity:0">
       <img id="sB" alt="NASA MODIS image of the whole Aral Sea in August 2018, mostly dry" style="opacity:0">
       <div class="shade"></div>
       <div class="cap"><div class="yr" id="sYr">1962</div><div class="msg" id="sMsg">A real photo from space. The sea was still huge.</div></div>
       <div class="area"><b id="sArea">68,000 km²</b><span id="sAreaL">in 1960, when the shrinking began<sup><a href="#fn2">2</a></sup></span></div>
-      <span class="credit" id="sCredit">USGS declassified US satellite photo, 18 May 1962 · black and white</span>
+      <span class="credit" id="sCredit">USGS declassified US satellite photo, 18 May 1962 · colourised from black and white</span>
       <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
   </div>
@@ -678,7 +678,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 
 <footer class="foot"><div class="in">
   <ol>
-    <li id="fn1">The first view is a real declassified US satellite photo, entity DS09034A038MC043, taken 18 May 1962 and held by the USGS EROS Center (public domain); it was rotated so north is up and trimmed of its film border. The 1960 area is from the cited study, and the yellow line on the 2000 view is NASA's approximate 1960 shoreline. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
+    <li id="fn1">The first view is a real declassified US satellite photo, entity DS09034A038MC043, taken 18 May 1962 and held by the USGS EROS Center (public domain); it was rotated so north is up, trimmed of its film border and colourised by us (the original film is black and white, so the colours are an artistic guess: blue water, sandy land). The 1960 area is from the cited study, and the yellow line on the 2000 view is NASA's approximate 1960 shoreline. Satellite images: NASA Earth Observatory, Terra MODIS true-colour scenes of the Aral Sea, 25 August 2000, 15 August 2001 and 21 August 2018, with the approximate 1960 shoreline in yellow. All three share one frame.</li>
     <li id="fn2">Aral Sea area: 1960 (68,000 km²) and 2010 from <a href="https://link.springer.com/article/10.1007/s13201-012-0048-z" target="_blank" rel="noopener">Applied Water Science, 2012</a>; 1998, 2004, 2018 and North Aral values from <a href="https://en.wikipedia.org/wiki/Aral_Sea" target="_blank" rel="noopener">Wikipedia, Aral Sea</a>. Different studies, so approximate.</li>
     <li id="fn3">Global temperature: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISTEMP v4</a>, annual anomaly vs 1951–1980. Carbon dioxide: <a href="https://gml.noaa.gov/ccgg/trends/" target="_blank" rel="noopener">NOAA GML</a>, Mauna Loa annual mean. Both via open <a href="https://github.com/datasets" target="_blank" rel="noopener">datasets</a> packages.</li>
     <li id="fn4">Tracker factors: UK government greenhouse gas conversion factors 2024: average petrol car 0.1645, local bus 0.10846 and national rail 0.03546 kg CO₂ per km, as listed by <a href="https://www.dur.ac.uk/media/durham-university/professional-services/energy-and-sustainability-team/CO2-conversion-factors-2023-24.pdf" target="_blank" rel="noopener">Durham University</a>. Shower flow of 9 L/min is an assumption.</li>
@@ -779,7 +779,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     var A = $('sA'), B = $('sB'), C = $('sC'); A.src = IMG.y2000; B.src = IMG.y2018;
     var EO = 'NASA Earth Observatory · MODIS';
     var steps = [
-      { yr: '1962', msg: 'A real photo from space. The sea was still huge.', area: '68,000 km²', l: 'in 1960, when the shrinking began', c: 'USGS declassified US satellite photo DS09034A038MC043, 18 May 1962 · black and white' },
+      { yr: '1962', msg: 'A real photo from space. The sea was still huge.', area: '68,000 km²', l: 'in 1960, when the shrinking began', c: 'USGS declassified US satellite photo DS09034A038MC043, 18 May 1962 · colourised from black and white' },
       { yr: '2000', msg: 'By 2000, the sea had split in two.', area: '28,687 → 17,160 km²', l: 'the 1998 and 2004 records', c: EO + ', 25 August 2000 · yellow line: 1960 shore' },
       { yr: '2018', msg: 'By 2018, most of it was gone.', area: '8,321 km²', l: 'left, about 12%', c: EO + ', 21 August 2018' }
     ];

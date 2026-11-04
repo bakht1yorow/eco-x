@@ -127,6 +127,8 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 
 /* planet pulse */
 .device { margin-top: 56px; border-radius: 30px; padding: 12px; background: linear-gradient(145deg, #2b2b2e, #0b0b0c); box-shadow: 0 50px 120px -30px rgba(41,151,255,.35), inset 0 1px 0 rgba(255,255,255,.12); }
+.pp-frame { display: block; width: 100%; height: clamp(600px, 80vh, 860px); border: 0; border-radius: 20px; background: #000; }
+@media (max-width: 734px) { .pp-frame { height: 760px; border-radius: 16px; } }
 .pp-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .pane { position: relative; aspect-ratio: 1; border-radius: 20px; overflow: hidden; background: #111; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
 .pane.drag { cursor: grabbing; }
@@ -486,19 +488,16 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 
 <section class="band dark center" id="pulse"><div class="in">
   <p class="eyebrow">Planet Pulse Map</p>
-  <h2 class="h2">Two years.<br>One view.</h2>
-  <p class="lead">Drag or zoom either map and the other follows. Point anywhere to mark the same spot on both.</p>
-  <div class="device rv">
-    <div class="pp-panes">
-      <div class="pane" id="paneA"><div class="seg" data-p="0"></div><div class="stage"><img alt="" id="imgA"></div><div class="xh"></div></div>
-      <div class="pane" id="paneB"><div class="seg" data-p="1"></div><div class="stage"><img alt="" id="imgB"></div><div class="xh"></div></div>
-    </div>
+  <h2 class="h2">The whole planet.<br>One pulse.</h2>
+  <p class="lead">Spin the globe, switch between five NASA data layers, and test whether a change is a real trend or just a noisy year. It opens on the Aral Sea.</p>
+  <div class="device rv pp-device">
+    <iframe class="pp-frame" src="pulse.html?embed=1&amp;site=aral" title="Planet Pulse interactive globe" loading="lazy" allow="fullscreen"></iframe>
   </div>
-  <div class="pp-tools"><button class="roundb" id="ppOut" type="button" aria-label="Zoom out">−</button><span id="ppZ">1.0×</span><button class="roundb" id="ppIn" type="button" aria-label="Zoom in">+</button><button class="btn ghost sm" id="ppReset" type="button" style="margin-left:8px">Reset</button></div>
+  <div class="pp-tools"><a class="btn ghost sm" href="pulse.html?site=aral" target="_blank" rel="noopener">Open full screen ↗</a></div>
   <div class="next3">
-    <div><span class="soonc">Coming next</span><b>Land-surface heat</b><p>MODIS ground temperature, which is not the air temperature in a forecast.</p></div>
-    <div><span class="soonc">Coming next</span><b>Vegetation (NDVI)</b><p>MODIS greenness, an indicator of plant cover across Uzbekistan.</p></div>
-    <div><span class="soonc">Coming next</span><b>Any month, any region</b><p>Compare heat and greenness together, season by season.</p></div>
+    <div><b>Five data layers</b><p>Temperature, water storage, vegetation, CO₂ and sea level, each with its NASA source.</p></div>
+    <div><b>Real trend tests</b><p>Mann-Kendall and Sen's slope show whether a change is a trend or year-to-year noise.</p></div>
+    <div><b>Any point on Earth</b><p>Click anywhere for an estimate, then compare it with a contrasting region.</p></div>
   </div>
 </div></section>
 
@@ -603,7 +602,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     <div class="m1head"><h3>Mission 01 · Aral Sea Investigation</h3><span id="mT">0 of 5 · 0 pts</span></div>
     <div class="bar"><i id="mBar"></i></div>
     <div class="checks" id="mChecks">
-      <label><input type="checkbox" data-pts="20"><span>In <a href="#pulse">Planet Pulse</a>, put 2000 and 2018 side by side. Find the 1960 south shore.</span><span class="pts">+20</span></label>
+      <label><input type="checkbox" data-pts="20"><span>In <a href="#pulse">Planet Pulse</a>, open the Aral Sea Basin and check whether its water loss is a significant trend.</span><span class="pts">+20</span></label>
       <label><input type="checkbox" data-pts="20"><span>Write one sentence: what changed between the two images?</span><span class="pts">+20</span></label>
       <label><input type="checkbox" data-pts="20"><span>In <a href="#georisk">GeoRisk</a>, compare the whole sea with the North Aral. Why opposite directions?</span><span class="pts">+20</span></label>
       <label><input type="checkbox" data-pts="20"><span>Run the <a href="#detective">Detective</a> on Aral Sea area. Note the speed and the noise chance.</span><span class="pts">+20</span></label>
@@ -809,36 +808,6 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     var ws = el.querySelectorAll('.w'), q = false;
     function upd() { q = false; var r = el.getBoundingClientRect(), vh = window.innerHeight, p = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (r.height + vh * 0.35))), n = Math.round(p * ws.length); Array.prototype.forEach.call(ws, function (w, k) { w.classList.toggle('on', k < n); }); }
     window.addEventListener('scroll', function () { if (!q) { q = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
-  })();
-
-  // ---------- Planet Pulse ----------
-  (function () {
-    var L = [['y2000', '2000'], ['y2001', '2001'], ['y2018', '2018'], ['lst', 'Heat'], ['ndvi', 'NDVI']];
-    var view = { s: 1, x: 0, y: 0 }, panes = [{ el: $('paneA'), img: $('imgA'), k: 'y2000' }, { el: $('paneB'), img: $('imgB'), k: 'y2018' }];
-    panes.forEach(function (p, i) {
-      p.stage = p.el.querySelector('.stage'); p.xh = p.el.querySelector('.xh'); p.seg = p.el.querySelector('.seg');
-      function draw() { p.seg.innerHTML = L.map(function (l) { var off = !IMG[l[0]]; return '<button type="button" data-k="' + l[0] + '" aria-pressed="' + (l[0] === p.k) + '"' + (off ? ' disabled title="Coming next"' : '') + '>' + l[1] + '</button>'; }).join(''); p.img.src = IMG[p.k]; p.img.alt = 'NASA MODIS true-colour image of the Aral Sea, ' + p.k.slice(1); }
-      p.seg.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-      p.seg.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.disabled) return; p.k = b.getAttribute('data-k'); draw(); });
-      draw();
-    });
-    function size() { return panes[0].el.getBoundingClientRect().width || 1; }
-    function apply() { var w = size(); view.s = Math.max(1, Math.min(6, view.s)); view.x = Math.min(0, Math.max(w - w * view.s, view.x)); view.y = Math.min(0, Math.max(w - w * view.s, view.y)); panes.forEach(function (p) { p.stage.style.transform = 'translate(' + view.x + 'px,' + view.y + 'px) scale(' + view.s + ')'; }); $('ppZ').textContent = view.s.toFixed(1) + '×'; }
-    function zoomAt(f, cx, cy) { var w = size(); if (cx === undefined) { cx = cy = w / 2; } var ns = Math.max(1, Math.min(6, view.s * f)); view.x = cx - (cx - view.x) * ns / view.s; view.y = cy - (cy - view.y) * ns / view.s; view.s = ns; apply(); }
-    var drag = null;
-    panes.forEach(function (p) {
-      p.el.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y }; p.el.classList.add('drag'); try { p.el.setPointerCapture(e.pointerId); } catch (x) {} });
-      p.el.addEventListener('pointermove', function (e) { var r = p.el.getBoundingClientRect(), lx = e.clientX - r.left, ly = e.clientY - r.top; if (drag) { view.x = drag.vx + e.clientX - drag.x; view.y = drag.vy + e.clientY - drag.y; apply(); } panes.forEach(function (q) { q.xh.style.display = 'block'; q.xh.style.left = lx + 'px'; q.xh.style.top = ly + 'px'; }); });
-      function end() { drag = null; p.el.classList.remove('drag'); }
-      p.el.addEventListener('pointerup', end); p.el.addEventListener('pointercancel', end);
-      p.el.addEventListener('pointerleave', function () { panes.forEach(function (q) { q.xh.style.display = 'none'; }); });
-      p.el.addEventListener('wheel', function (e) { e.preventDefault(); var r = p.el.getBoundingClientRect(); zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
-      p.el.addEventListener('dblclick', function (e) { var r = p.el.getBoundingClientRect(); zoomAt(1.8, e.clientX - r.left, e.clientY - r.top); });
-    });
-    $('ppIn').addEventListener('click', function () { zoomAt(1.4); }); $('ppOut').addEventListener('click', function () { zoomAt(1 / 1.4); });
-    $('ppReset').addEventListener('click', function () { view = { s: 1, x: 0, y: 0 }; apply(); });
-    window.addEventListener('resize', function () { view = { s: 1, x: 0, y: 0 }; apply(); });
-    apply();
   })();
 
   // ---------- GeoRisk bento ----------

@@ -7,4 +7,4 @@ window.ECOX_FIREBASE = {
   appId: "1:520089265371:web:68bf8c27a82cb6b880d8fe"
 };
 // Which sign-in buttons to show. Apple needs an Apple Developer account.
-window.ECOX_PROVIDERS = { google: true, microsoft: false, github: false, apple: false, email: true };
+window.ECOX_PROVIDERS = { google: true, microsoft: false, github: true, apple: false, email: true };

@@ -336,6 +336,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 .or { display: flex; align-items: center; gap: 12px; color: var(--mute); font-size: .85rem; margin: 18px 0 14px; }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .emailf { display: grid; gap: 10px; }
+.emailf[hidden], .emailf input[hidden], .linkb[hidden], .provs[hidden], .or[hidden] { display: none; }
 .emailf input { width: 100%; font: 400 1rem var(--font); padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
 .emailf .btn { width: 100%; padding: 13px; }
 .linkb { border: 0; background: none; color: var(--blue); font: 500 .9rem var(--font); cursor: pointer; padding: 4px; }
@@ -446,8 +447,16 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
       <button class="btn" type="submit" id="aGo">Continue with email</button>
       <button class="linkb" type="button" id="aMode">New here? Create an account</button>
     </form>
+    <button class="linkb" type="button" id="phMode" hidden>Use my phone number instead</button>
+    <form id="phoneForm" class="emailf" novalidate hidden>
+      <input type="tel" id="phNum" placeholder="Phone with country code, e.g. +998901234567" autocomplete="tel" aria-label="Phone number">
+      <input type="text" id="phCode" placeholder="6-digit code" inputmode="numeric" autocomplete="one-time-code" aria-label="Verification code" hidden>
+      <button class="btn" type="submit" id="phGo">Send code</button>
+      <button class="linkb" type="button" id="phBack">Back to other options</button>
+    </form>
+    <div id="recap"></div>
     <p class="aerr" id="aErr" role="alert"></p>
-    <p class="fine">Eco-X keeps only your name and email to save your progress.</p>
+    <p class="fine">Eco-X keeps only your name and email or phone to save your progress.</p>
   </div>
 </div>
 
@@ -1100,7 +1109,7 @@ if (r) {
   frame();
 }
 </script>
-<script src="assets/auth-config.js?v=3"></script>
+<script src="assets/auth-config.js?v=4"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
@@ -1132,6 +1141,9 @@ if (r) {
     if (c.indexOf('account-exists-with-different-credential') >= 0) return 'This email is already linked to another sign-in method. Use that one.';
     if (c.indexOf('unauthorized-domain') >= 0) return 'This website is not yet allowed to sign in. We are fixing it.';
     if (c.indexOf('operation-not-allowed') >= 0) return 'This sign-in method is not switched on yet.';
+    if (c.indexOf('invalid-phone-number') >= 0) return 'Check the phone number and include the country code.';
+    if (c.indexOf('too-many-requests') >= 0 || c.indexOf('quota-exceeded') >= 0) return 'Too many tries. Please wait a while or use another sign-in method.';
+    if (c.indexOf('invalid-verification-code') >= 0 || c.indexOf('code-expired') >= 0) return 'That code is not right or has expired.';
     return 'Sign-in did not work. Please try again.';
   }
   var P = {
@@ -1157,11 +1169,37 @@ if (r) {
     if (!em || !pw) { $('aErr').textContent = 'Enter your email and a password.'; return; }
     (signup ? auth.createUserWithEmailAndPassword(em, pw) : auth.signInWithEmailAndPassword(em, pw)).then(close).catch(function (err) { $('aErr').textContent = nice(err); });
   });
+
+  // phone sign-in
+  var phConfirm = null, phVerifier = null;
+  if (prov.phone) { $('phMode').hidden = false; }
+  function phShow(on) { $('phoneForm').hidden = !on; $('emailForm').hidden = on || !prov.email; $('provs').hidden = on; $('orRow').hidden = on; $('phMode').hidden = on || !prov.phone; $('aErr').textContent = ''; }
+  $('phMode').addEventListener('click', function () { phShow(true); });
+  $('phBack').addEventListener('click', function () { phShow(false); phConfirm = null; $('phCode').hidden = true; $('phCode').value = ''; $('phGo').textContent = 'Send code'; });
+  $('phoneForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!ready) { $('aErr').textContent = 'Sign-in is being switched on. Please try again soon.'; return; }
+    $('aErr').textContent = '';
+    if (!phConfirm) {
+      var num = $('phNum').value.replace(/[\s()-]/g, '');
+      if (!/^\+[1-9]\d{7,14}$/.test(num)) { $('aErr').textContent = 'Enter the number with the country code, like +998901234567.'; return; }
+      $('phGo').disabled = true;
+      if (!phVerifier) phVerifier = new firebase.auth.RecaptchaVerifier('recap', { size: 'invisible' });
+      auth.signInWithPhoneNumber(num, phVerifier).then(function (c) {
+        phConfirm = c; $('phCode').hidden = false; $('phCode').focus(); $('phGo').textContent = 'Verify code'; $('phGo').disabled = false;
+        $('aErr').textContent = 'We sent a code by SMS.';
+      }).catch(function (err) { $('phGo').disabled = false; try { phVerifier.clear(); } catch (x) {} phVerifier = null; $('aErr').textContent = nice(err); });
+    } else {
+      var code = $('phCode').value.trim();
+      if (!/^\d{6}$/.test(code)) { $('aErr').textContent = 'Enter the 6-digit code.'; return; }
+      phConfirm.confirm(code).then(close).catch(function (err) { $('aErr').textContent = nice(err); });
+    }
+  });
   function showAccount(u) {
     var sh = modal.querySelector('.sheet'), keep = sh.innerHTML;
     sh.innerHTML = '<button class="x" type="button" aria-label="Close">×</button><div class="acct">' + (u.photoURL ? '<img src="' + u.photoURL + '" alt="">' : '') + '<h3></h3><p class="msub"></p><p class="msub">Your progress is saved on this device while you are signed in.</p><button class="btn" type="button" id="aOut">Sign out</button></div>';
     sh.querySelector('h3').textContent = u.displayName || 'Signed in';
-    sh.querySelectorAll('.msub')[0].textContent = u.email || '';
+    sh.querySelectorAll('.msub')[0].textContent = u.email || u.phoneNumber || '';
     modal.hidden = false;
     function restore() { sh.innerHTML = keep; location.reload(); }
     sh.querySelector('.x').addEventListener('click', function () { modal.hidden = true; sh.innerHTML = keep; location.reload(); });
@@ -1171,7 +1209,7 @@ if (r) {
     auth.getRedirectResult().catch(function (err) { var m = nice(err); if (m) { open(); $('aErr').textContent = m; } });
     auth.onAuthStateChanged(function (u) {
       var b = $('signBtn');
-      if (u) { var first = (u.displayName || u.email || 'Account').split(' ')[0].split('@')[0]; b.innerHTML = (u.photoURL ? '<img src="' + u.photoURL + '" alt="">' : '') + '<span></span>'; b.querySelector('span').textContent = first; }
+      if (u) { var first = (u.displayName || u.email || u.phoneNumber || 'Account').split(' ')[0].split('@')[0]; b.innerHTML = (u.photoURL ? '<img src="' + u.photoURL + '" alt="">' : '') + '<span></span>'; b.querySelector('span').textContent = first; }
       else b.textContent = 'Sign in';
     });
   }

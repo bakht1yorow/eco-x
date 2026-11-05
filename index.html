@@ -150,7 +150,7 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 /* bento */
 .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: minmax(210px, auto); gap: 18px; margin-top: 56px; }
 .tile { background: var(--c-card); border-radius: 28px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; position: relative; overflow: hidden; min-width: 0; }
-.tile.w2 { grid-column: span 2; } .tile.w3 { grid-column: span 3; } .tile.w4 { grid-column: span 4; } .tile.h2r { grid-row: span 2; }
+.tile.w6 { grid-column: span 6; } .tile.w2 { grid-column: span 2; } .tile.w3 { grid-column: span 3; } .tile.w4 { grid-column: span 4; } .tile.h2r { grid-row: span 2; }
 .tile .k { font-size: .95rem; font-weight: 600; color: var(--c-mute); letter-spacing: -0.01em; }
 .tile .big { font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 800; letter-spacing: -0.06em; line-height: .9; font-variant-numeric: tabular-nums; }
 .tile .big small { font-size: .26em; font-weight: 600; letter-spacing: -0.01em; color: var(--c-mute); margin-left: 6px; }
@@ -165,6 +165,24 @@ sup a { font-size: .62em; color: inherit; opacity: .7; margin-left: 1px; }
 .tile.img p { color: #e8e8ed; }
 .tile svg { width: 100%; height: auto; display: block; }
 .fn { margin-top: 26px; font-size: .78rem; color: var(--mute); text-align: center; }
+
+
+/* restoration monitor */
+.cause { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 56px; text-align: left; counter-reset: c; }
+.cause > div { position: relative; padding: 22px 22px 22px 0; border-top: 2px solid var(--c-line); }
+.cause > div::before { counter-increment: c; content: counter(c); display: block; font-size: .8rem; font-weight: 700; color: var(--c-sea); margin-bottom: 8px; letter-spacing: .04em; }
+.cause b { display: block; font-size: 1.15rem; letter-spacing: -0.02em; margin-bottom: 6px; }
+.cause p { color: var(--c-mute); font-size: .96rem; }
+.rm { margin-top: 36px; }
+.rm .tile { text-align: left; }
+.rm .tile .big { word-break: normal; overflow-wrap: anywhere; }
+.rm .tile .big.w { font-size: clamp(2rem, 4.2vw, 3.2rem); line-height: 1.02; letter-spacing: -0.04em; }
+.rm .src { font-size: .78rem; color: var(--c-mute); }
+.rm .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 14px; }
+.rm .stats div { border-top: 1px solid var(--c-line); padding-top: 12px; }
+.rm .stats b { display: block; font-size: 1.5rem; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.rm .stats span { font-size: .85rem; color: var(--c-mute); }
+.rm .plan { margin-top: 14px; font-size: .9rem; color: var(--c-mute); border-left: 3px solid var(--c-sea); padding-left: 12px; }
 
 /* detective */
 .det { margin-top: 56px; background: var(--white); border-radius: 30px; padding: clamp(18px, 3vw, 36px); box-shadow: 0 30px 80px -40px rgba(0,0,0,.25); text-align: left; }
@@ -390,7 +408,7 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
 }
 @media (max-width: 900px) {
   .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tile.w2, .tile.w3, .tile.w4 { grid-column: span 2; } .tile.half { grid-column: span 1; }
+  .tile.w2, .tile.w3, .tile.w4, .tile.w6 { grid-column: span 2; } .tile.half { grid-column: span 1; }
   .act, .ndvi, .own-grid { grid-template-columns: minmax(0, 1fr); }
   .phone { margin: 0 auto; }
   .answer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); } .answer .say { grid-column: 1 / -1; }
@@ -411,6 +429,8 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
   .nav .btn { display: none; }
   .story .dots { display: none; }
 }
+@media (max-width: 860px) { .cause { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rm .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cause { grid-template-columns: minmax(0, 1fr); } .cause > div { padding-right: 0; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .rv { animation: none !important; } }
 </style>
 </head>
@@ -491,6 +511,37 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     </div>
   </div>
 </section>
+
+<section class="band grayb center" id="restore"><div class="in">
+  <p class="eyebrow">Restoration Monitor</p>
+  <h2 class="h2">Why did it happen?<br><span class="grad">And what is coming back.</span></h2>
+  <p class="lead">Water, temperature, vegetation and dust, read together. Each card says where its number comes from.</p>
+  <div class="cause">
+    <div><b>Rivers diverted</b><p>From the 1960s, irrigation for cotton and rice took most of the water of the Amu Darya and Syr Darya<sup><a href="#fn6">6</a></sup>.</p></div>
+    <div><b>Less water arrives</b><p>The two rivers feed the sea. With little inflow, evaporation won and the sea shrank.</p></div>
+    <div><b>Seabed dries</b><p>The sea fell from 68,000 km² to 8,321 km² by 2018<sup><a href="#fn2">2</a></sup>. The dry seabed is now a desert, the Aralkum.</p></div>
+    <div><b>Dust and salt blow</b><p>Wind lifts salt and sand off the dry seabed and carries it over farms and towns<sup><a href="#fn7">7</a></sup>.</p></div>
+  </div>
+  <div class="bento rm" id="rmGrid">
+    <div class="tile w3 rv"><span class="lvl high">Lost</span><span class="k">Water</span><div class="big">88%<small>of the area gone</small></div><p><b>68,000 → 8,321 km²</b> between 1960 and 2018, about 12% of the sea left<sup><a href="#fn2">2</a></sup>.</p></div>
+    <div class="tile w3 rv"><span class="lvl na">No single number</span><span class="k">Temperature</span><div class="big w">Hotter summers, colder winters</div><p>The sea used to soften the climate. Reports from the region describe longer, hotter summers and shorter, bitterly cold winters<sup><a href="#fn8">8</a></sup>. We do not show a number we cannot check.</p></div>
+    <div class="tile w3 rv"><span class="lvl good">Early</span><span class="k">Vegetation</span><div class="big">658<small>hectares planted</small></div><p><b>823,000 saxaul trees</b> planted on the dry seabed from 2020 to 2025<sup><a href="#fn9">9</a></sup>. The Aralkum is about 6,000,000 hectares, so this is a first step, about 0.01%.</p></div>
+    <div class="tile w3 rv"><span class="lvl high">Ongoing</span><span class="k">Dust</span><div class="big">15–75<small>million tons a year</small></div><p>Sand, dust and salt lifted from the <b>60,000 km²</b> Aralkum, per a World Bank study summarised by the UN<sup><a href="#fn7">7</a></sup>.</p></div>
+    <div class="tile w6 rv">
+      <span class="lvl good">Coming back</span><span class="k">The North Aral Sea</span>
+      <p><b>A dam at Kok-Aral, finished in August 2005,</b> let the northern part refill on its own<sup><a href="#fn10">10</a></sup>.</p>
+      <div class="stats">
+        <div><b>&lt; 10 g/L</b><span>salinity, halved by 2007</span></div>
+        <div><b>50 → 2,000 t</b><span>fish catch, 2004 to 2007</span></div>
+        <div><b>27 billion m³</b><span>water in 2025, up 42%</span></div>
+        <div><b>870 km²</b><span>of dry seabed covered again</span></div>
+      </div>
+      <p class="plan">Planned, not done: a second phase for 2026 to 2029 aims to raise the water level and grow the volume from 27 to 34 billion m³<sup><a href="#fn11">11</a></sup>. The southern sea has no such dam.</p>
+    </div>
+  </div>
+  <p class="fn">Figures come from the published sources in the notes below, not from Eco-X measurements. Dust and heat layers are planned for Planet Pulse.</p>
+</div></section>
+
 
 <section class="band light" id="why"><div class="in">
   <p class="statement" id="stmt">Satellites watch every corner of Earth, every day. Most people never see that evidence. Eco-X turns it into something anyone can explore, understand, and act on.</p>
@@ -692,6 +743,12 @@ input[type=range] { width: 100%; accent-color: var(--blue); }
     <li id="fn3">Global temperature: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISTEMP v4</a>, annual anomaly vs 1951–1980. Carbon dioxide: <a href="https://gml.noaa.gov/ccgg/trends/" target="_blank" rel="noopener">NOAA GML</a>, Mauna Loa annual mean. Both via open <a href="https://github.com/datasets" target="_blank" rel="noopener">datasets</a> packages.</li>
     <li id="fn4">Tracker factors: UK government greenhouse gas conversion factors 2024: average petrol car 0.1645, local bus 0.10846 and national rail 0.03546 kg CO₂ per km, as listed by <a href="https://www.dur.ac.uk/media/durham-university/professional-services/energy-and-sustainability-team/CO2-conversion-factors-2023-24.pdf" target="_blank" rel="noopener">Durham University</a>. Shower flow of 9 L/min is an assumption.</li>
     <li id="fn5">Methods: Mann-Kendall test, Sen’s slope with 95% range, and trend-free pre-whitening when years depend on each other. A trend is not a cause.</li>
+    <li id="fn6">Cause: <a href="https://www.grida.no/resources/5615" target="_blank" rel="noopener">UNEP/GRID-Arendal, The disappearance of the Aral Sea</a>: the shrinking is attributed mainly to diverting the Amu Darya and Syr Darya for irrigation.</li>
+    <li id="fn7">Dust: <a href="https://www.unccd.int/resources/unccd-library/sand-and-dust-storms-aralkum-yearly-carry-out-75-million-tons-sand-dust-and" target="_blank" rel="noopener">UNCCD, 2022</a>, summarising a World Bank study: about 60,000 km² of Aralkum and 15 to 75 million tons of sand, dust and salt a year. The range is wide because dust is hard to measure.</li>
+    <li id="fn8">Temperature: described in an <a href="https://phys.org/news/2024-02-climate-fueling-aral-sea-residents.amp" target="_blank" rel="noopener">AP report, 2024</a> as hotter, longer summers and shorter, bitterly cold winters. No local measurement is quoted there, so we show none.</li>
+    <li id="fn9">Vegetation: <a href="https://www.undp.org/uzbekistan/green-aral-sea" target="_blank" rel="noopener">UNDP Uzbekistan, Green Aral Sea</a>: 823,000 saxaul trees on 658.2 hectares, 2020 to 2025. The 6,000,000 hectares is 60,000 km² converted.</li>
+    <li id="fn10">North Aral: <a href="https://documents1.worldbank.org/curated/en/888771468089960580/pdf/462360BRI0Box31e0no0FS231Kazakhstan.pdf" target="_blank" rel="noopener">World Bank brief</a> (dike finished August 2005; salinity under 10 g/L and fish catch about 2,000 t by 2007), and <a href="https://globalvoices.org/2026/05/29/how-kazakhstan-resurrected-the-north-aral-sea/" target="_blank" rel="noopener">Global Voices, 2026</a> (27 billion m³ in 2025, 870 km² of seabed reclaimed). Global Voices is a news report, not a measurement.</li>
+    <li id="fn11">Second phase: planned for 2026 to 2029 (water volume 27 to 34 billion m³), as reported by <a href="https://globalvoices.org/2026/05/29/how-kazakhstan-resurrected-the-north-aral-sea/" target="_blank" rel="noopener">Global Voices, 2026</a>. A plan, not a result.</li>
   </ol>
   <div class="end"><span>Eco-X · youth-led environmental science and technology · Uzbekistan</span><span>Built with NASA Earth-observation data. Not an official NASA product.</span></div>
 </div></footer>
